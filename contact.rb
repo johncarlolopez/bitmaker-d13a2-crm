@@ -131,7 +131,6 @@ class Contact
           matches << contact
         end
       }
-      return match_result(matches)
     end
     return match_result(matches)
   end
@@ -190,9 +189,9 @@ class Contact
 
 end
 
-john = Contact.create("john","lopez","john@gmail.com")
-dave = Contact.create("dave","smith","dave@gmail.com")
-charl = Contact.create("charl","lopez","charl@gmail.com")
+# john = Contact.create("john","lopez","john@gmail.com")
+# dave = Contact.create("dave","smith","dave@gmail.com")
+# charl = Contact.create("charl","lopez","charl@gmail.com")
 
 # p Contact.all
 
