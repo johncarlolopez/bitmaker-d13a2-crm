@@ -62,7 +62,53 @@ class CRM
   end
 
   def modify_existing_contact
-
+    # Need to implement checks for inputs
+    #   currently wrong inputs should not throw exceptions but not do anything
+    count = 1
+    puts "\n --- Modify Contact ---"
+    print "Please enter search criteria:"
+    result = Contact.find(gets.chomp)
+    puts "Results:"
+    # If there are mutliple results
+    if result.class == Array
+      # Count how many results there are
+      result.each {|contact|
+        print "#{count}. "
+        count += 1
+        show_contact(contact)
+      }
+      print "Which contact do you want to modify?(1-#{count-1}):"
+      contact_num_selected = gets.chomp.to_i
+      if (contact_num_selected > 0) && (contact_num_selected < count)
+        puts "Do you want to modify contact below?:(y/n)"
+        show_contact(result[contact_num_selected-1])
+        ans = gets.chomp
+        if ans.downcase == 'y'
+          print "What would you like to modify?(first name,last name,email,notes): "
+          attribute = gets.chomp
+          print "What would you like to set it to?: "
+          val = gets.chomp
+          result[contact_num_selected-1].update(attribute,val)
+          puts "Contact was updated"
+        end
+      else
+        puts "Contact was not updated"
+      end
+    else
+      show_contact(result)
+      print "Do you want to modify this contact?(y/n):"
+      ans = gets.chomp.downcase
+      if ans == 'y'
+        print "What would you like to modify?(first name,last name,email,notes): "
+        attribute = gets.chomp
+        print "What would you like to set it to?: "
+        val = gets.chomp
+        result.update(attribute,val)
+        puts "Contact was updated"
+      else
+        puts "Contact was not updated"
+      end
+    end
   end
 
   def delete_contact

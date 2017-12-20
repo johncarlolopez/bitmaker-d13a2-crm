@@ -102,12 +102,14 @@ class Contact
   # and then make the appropriate change to the contact
   def update(attribute,val)
     case attribute
-    when "first_name"
-      self.first_name = val
-    when "last_name"
-      self.last_name = val
+    when "first name"
+      self.first_name = val.to_s
+    when "last name"
+      self.last_name = val.to_s
     when "email"
-      self.email = val
+      self.email = val.to_s
+    when "notes"
+      self.notes = val.to_s
     end
   end
 
