@@ -6,7 +6,7 @@ class Contact
   @@id = 1
 
   # This method should initialize the contact's attributes
-  def initialize(first_name, last_name, email, note = '')
+  def initialize(first_name, last_name, email = '', note = '')
     @first_name = first_name
     @last_name = last_name
     @email = email
@@ -55,7 +55,7 @@ class Contact
 
   # This method should call the initializer,
   # store the newly created contact, and then return it
-  def self.create(first_name,last_name,email,notes = '')
+  def self.create(first_name,last_name,email ='',notes = '')
     new_contact = Contact.new(first_name,last_name,email,notes)
     @@contacts << new_contact
     return new_contact
@@ -99,8 +99,15 @@ class Contact
   # 1. which of the contact's attributes you want to update
   # 2. the new value for that attribute
   # and then make the appropriate change to the contact
-  def update
-
+  def update(attribute,val)
+    case attribute
+      when "first_name"
+        self.first_name = val
+      when "last_name"
+        self.last_name = val
+      when "email"
+        self.email = val
+    end
   end
 
   # This method should work similarly to the find method above
@@ -122,24 +129,29 @@ class Contact
 
   # This method should delete the contact
   # HINT: Check the Array class docs for built-in methods that might be useful here
-  def delete(criteria)
+  def delete
+    @@contacts.delete(self)
+  end
+
+
+  def self.delete(criteria)
     matches = []
     # binding.pry
     if criteria.class == String
       @@contacts.each {|contact|
         if contact.full_name.include?(criteria)
           matches << contact
-          @@contact.delete(contact)
+          contact.delete
         elsif contact.email == criteria
           matches << contact
-          @@contact.delete(contact)
+          contact.delete
         end
       }
     elsif criteria.class == Integer
       @@contacts.each {|contact|
         if contact.id == criteria
           matches << contact
-          @@contact.delete(contact)
+          contact.delete
         end
       }
     end
@@ -161,10 +173,16 @@ john = Contact.create("john","lopez","john@gmail.com")
 dave = Contact.create("dave","smith","dave@gmail.com")
 charl = Contact.create("charl","lopez","charl@gmail.com")
 
-p Contact.all
+# p Contact.all
 
 # p charl.full_name
 # p Contact.find("charl")
-puts "find:"
+# puts "find:"
 # p Contact.find("lopez")
 # p Contact.find("lul")
+
+# p Contact.delete("charl")
+# p Contact.all
+
+# charl.update("first_name","charle")
+# p charl.first_name
