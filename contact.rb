@@ -1,4 +1,4 @@
-require "pry"
+# require "pry"
 # Contact class
 class Contact
   # Class variables
@@ -97,12 +97,12 @@ class Contact
   # and then make the appropriate change to the contact
   def update(attribute,val)
     case attribute
-      when "first_name"
-        self.first_name = val
-      when "last_name"
-        self.last_name = val
-      when "email"
-        self.email = val
+    when "first_name"
+      self.first_name = val
+    when "last_name"
+      self.last_name = val
+    when "email"
+      self.email = val
     end
   end
 
@@ -113,25 +113,25 @@ class Contact
   def self.find_by(attribute,val)
     matches = []
     case attribute.downcase
-      when "first name"
-        @@contacts.each {|contact|
-          if contact.first_name == val.downcase
-            matches << contact
-          end
-        }
-      when "last name"
-        @@contacts.each {|contact|
-          if contact.last_name == val.downcase
-            matches << contact
-          end
-        }
-      when "email"
-        @@contacts.each {|contact|
-          if contact.email == val.downcase
-            matches << contact
-          end
-        }
-        return match_result(matches)
+    when "first name"
+      @@contacts.each {|contact|
+        if contact.first_name == val.downcase
+          matches << contact
+        end
+      }
+    when "last name"
+      @@contacts.each {|contact|
+        if contact.last_name == val.downcase
+          matches << contact
+        end
+      }
+    when "email"
+      @@contacts.each {|contact|
+        if contact.email == val.downcase
+          matches << contact
+        end
+      }
+      return match_result(matches)
     end
     return match_result(matches)
   end
@@ -150,7 +150,6 @@ class Contact
   def delete
     @@contacts.delete(self)
   end
-
 
   def self.delete(criteria)
     matches = []
@@ -190,7 +189,6 @@ class Contact
   # Feel free to add other methods here, if you need them.
 
 end
-
 
 john = Contact.create("john","lopez","john@gmail.com")
 dave = Contact.create("dave","smith","dave@gmail.com")
