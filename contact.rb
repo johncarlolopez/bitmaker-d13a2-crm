@@ -7,9 +7,9 @@ class Contact
 
   # This method should initialize the contact's attributes
   def initialize(first_name, last_name, email = '', note = '')
-    @first_name = first_name
-    @last_name = last_name
-    @email = email
+    @first_name = first_name.downcase
+    @last_name = last_name.downcase
+    @email = email.downcase
     @note = note
     @id = @@id
     @@id += 1
@@ -69,30 +69,26 @@ class Contact
   # This method should accept an id as an argument
   # and return the contact who has that id
   def self.find(criteria)
+    # extended
     matches = []
     # binding.pry
+    puts criteria.class
     if criteria.class == String
       @@contacts.each {|contact|
-        if contact.full_name.include?(criteria)
+        if contact.full_name.include?(criteria.downcase)
           matches << contact
-        elsif contact.email == criteria
+        elsif contact.email == criteria.downcase
           matches << contact
         end
       }
-    elsif criteria.class == Integer
+    elsif criteria.class == Fixnum
       @@contacts.each {|contact|
         if contact.id == criteria
           matches << contact
         end
       }
     end
-    if matches.count == 1
-      return matches.first
-    elsif matches.count == 0
-      return nil
-    else
-      return matches
-    end
+    return match_result(matches)
   end
 
   # This method should allow you to specify
@@ -114,8 +110,30 @@ class Contact
   # but it should allow you to search for a contact using attributes other than id
   # by specifying both the name of the attribute and the value
   # eg. searching for 'first_name', 'Betty' should return the first contact named Betty
-  def self.find_by()
-
+  def self.find_by(attribute,val)
+    matches = []
+    case attribute.downcase
+      when "first name"
+        @@contacts.each {|contact|
+          if contact.first_name == val.downcase
+            matches << contact
+          end
+        }
+      when "last name"
+        @@contacts.each {|contact|
+          if contact.last_name == val.downcase
+            matches << contact
+          end
+        }
+      when "email"
+        @@contacts.each {|contact|
+          if contact.email == val.downcase
+            matches << contact
+          end
+        }
+        return match_result(matches)
+    end
+    return match_result(matches)
   end
 
   # This method should delete all of the contacts
@@ -137,17 +155,18 @@ class Contact
   def self.delete(criteria)
     matches = []
     # binding.pry
+    # Might need changing as this is a wide delete
     if criteria.class == String
       @@contacts.each {|contact|
-        if contact.full_name.include?(criteria)
+        if contact.full_name.include?(criteria.downcase)
           matches << contact
           contact.delete
-        elsif contact.email == criteria
+        elsif contact.email == criteria.downcase
           matches << contact
           contact.delete
         end
       }
-    elsif criteria.class == Integer
+    elsif criteria.class == Fixnum
       @@contacts.each {|contact|
         if contact.id == criteria
           matches << contact
@@ -155,6 +174,11 @@ class Contact
         end
       }
     end
+    return match_result(matches)
+  end
+
+  # returns in nicer format
+  def self.match_result(matches)
     if matches.count == 1
       return matches.first
     elsif matches.count == 0
@@ -163,7 +187,6 @@ class Contact
       return matches
     end
   end
-
   # Feel free to add other methods here, if you need them.
 
 end
@@ -177,6 +200,7 @@ charl = Contact.create("charl","lopez","charl@gmail.com")
 
 # p charl.full_name
 # p Contact.find("charl")
+# p Contact.find(1)
 # puts "find:"
 # p Contact.find("lopez")
 # p Contact.find("lul")
@@ -186,3 +210,5 @@ charl = Contact.create("charl","lopez","charl@gmail.com")
 
 # charl.update("first_name","charle")
 # p charl.first_name
+# p Contact.find_by("first name","charl")
+# p Contact.find_by("last name","lopez")
