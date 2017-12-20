@@ -6,11 +6,11 @@ class Contact
   @@id = 1
 
   # This method should initialize the contact's attributes
-  def initialize(first_name, last_name, email = '', note = '')
+  def initialize(first_name, last_name, email = '', notes = '')
     @first_name = first_name.downcase
     @last_name = last_name.downcase
     @email = email.downcase
-    @note = note
+    @notes = notes
     @id = @@id
     @@id += 1
   end
@@ -72,18 +72,23 @@ class Contact
     # extended
     matches = []
     # binding.pry
-    puts criteria.class
+    # puts criteria.class
     if criteria.class == String
       @@contacts.each {|contact|
         if contact.full_name.include?(criteria.downcase)
           matches << contact
-        elsif contact.email == criteria.downcase
+        elsif contact.email.include?(criteria.downcase)
           matches << contact
+        elsif (contact.notes)
+          # Only run if there are notes otherwise it will show exception
+          if contact.notes.include?(criteria.downcase)
+            matches << contact
+          end
         end
       }
     elsif criteria.class == Fixnum
       @@contacts.each {|contact|
-        if contact.id == criteria
+        if contact.id == criteria.to_i
           matches << contact
         end
       }
@@ -130,6 +135,14 @@ class Contact
         if contact.email == val.downcase
           matches << contact
         end
+      }
+    when "id"
+      @@contacts.each {|contact|
+        if contact.id == val.to_i
+          matches << contact
+          # puts "WORKED"
+        end
+        # puts "contact.id:#{contact.id}//val#{val}"
       }
     end
     return match_result(matches)

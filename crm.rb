@@ -15,13 +15,14 @@ class CRM
   end
 
   def print_main_menu
-    puts ' --- Main Menu ---'
+    puts "\n --- Main Menu ---"
     puts '[1] Add a new contact'
     puts '[2] Modify an existing contact'
     puts '[3] Delete a contact'
     puts '[4] Display all the contacts'
-    puts '[5] Search by attribute'
-    puts '[6] Exit'
+    puts '[5] Search all attributes'
+    puts '[6] Search by attribute'
+    puts '[7] Exit'
     print 'Enter a number: '
   end
 
@@ -37,15 +38,17 @@ class CRM
       when 4
         display_all_contacts
       when 5
-        search_by_attribute
+        search_all
       when 6
+        search_by_attribute
+      when 7
         system exit
       else
     end
   end
 
   def add_new_contact
-    puts " --- Create New Contact ---"
+    puts "\n --- Create New Contact ---"
     print "Please enter first name:"
     first_name = gets.chomp
     print "Please enter last name:"
@@ -55,7 +58,7 @@ class CRM
     print "Please enter notes (optional):"
     notes = gets.chomp
     Contact.create(first_name,last_name,email,notes)
-    puts " --- Contact created ---"
+    puts "\n --- Contact created ---"
   end
 
   def modify_existing_contact
@@ -67,20 +70,55 @@ class CRM
   end
 
   def display_all_contacts
-    puts " --- All Contacts ---"
+    puts "\n --- All Contacts ---"
     Contact.all.each {|contact|
-      puts "#{contact.full_name.split.map(&:capitalize).join(' ')} | email:#{contact.email} | notes:#{contact.notes}"
+      show_contact(contact)
     }
   end
 
-  def search_by_attribute
-
+  def search_all
+    puts "\n --- Search Contact ---"
+    print "Please enter search criteria:"
+    result = Contact.find(gets.chomp)
+    puts "Results:"
+    if result.class == Array
+      result.each {|contact|
+        show_contact(contact)
+      }
+    else
+      show_contact(result)
+    end
   end
 
+  def search_by_attribute
+    puts "\n --- Search by attribute ---"
+    print "Please enter search criteria (first name,last name, email, id): "
+    criteria = gets.chomp
+    print "Please enter value you want to search (ex. \"john\",\"lopez\", \"john@gmail.com\", 1): "
+    val = gets.chomp
+    result = Contact.find_by(criteria,val)
+    puts "Results:"
+    if result.class == Array
+      result.each {|contact|
+        show_contact(contact)
+      }
+    else
+      show_contact(result)
+    end
+  end
+
+  def show_contact(contact)
+    puts "#{contact.full_name.split.map(&:capitalize).join(' ')} | email:#{contact.email} | notes:#{contact.notes}"
+  end
 
 end
 
-# john = Contact.create("john","lopez","john@gmail.com")
-# dave = Contact.create("dave","smith","dave@gmail.com")
-# charl = Contact.create("charl","lopez","charl@gmail.com")
+Contact.create("john","lopez","john@gmail.com","made this program")
+Contact.create("dave","smith","dave@gmail.com")
+Contact.create("charlize","lopez","charl@gmail.com")
+Contact.create("bob","doel","bob@usa.gov")
+Contact.create("lorem","ipsum","lee@latin.org")
+
+
+
 CRM.new
